@@ -3,8 +3,11 @@ package com.epcm.dao;
 import com.epcm.entity.LoginInfo;
 import com.epcm.entity.example.LoginInfoExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface LoginInfoMapper {
     long countByExample(LoginInfoExample example);
 

@@ -3,8 +3,11 @@ package com.epcm.dao;
 import com.epcm.entity.UserPosition;
 import com.epcm.entity.example.UserPositionExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface UserPositionMapper {
     long countByExample(UserPositionExample example);
 

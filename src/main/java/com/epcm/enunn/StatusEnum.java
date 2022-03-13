@@ -15,6 +15,9 @@ public enum StatusEnum {
     USER_REGISTER_FAILED(507,"USER_REGISTER_FAIL : 用户注册失败！"),
     TOKEN_EXPIRE(508,"TOKEN_EXPIRE : 用户token过期！请重新登录"),
     LIST_IS_EMPTY_OR_NOT_UNIQUE(509,"LIST_IS_EMPTY_OR_NOT_UNIQUE : 列表为空或不唯一！"),
+    HISTORY_INSERT_FAIL(510,"HISTORY_INSERT_FAIL : 打卡记录插入失败！"),
+    USERINFO_INSERT_FAILED(511,"USERINFO_INSERT_FAILED : 用户信息插入失败！"),
+    POSITION_INSERT_FAILED(512,"POSITION_INSERT_FAILED : 定位信息上传失败！"),
     ;
 
     final int code;

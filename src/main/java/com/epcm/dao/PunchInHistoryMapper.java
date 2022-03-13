@@ -3,8 +3,11 @@ package com.epcm.dao;
 import com.epcm.entity.PunchInHistory;
 import com.epcm.entity.example.PunchInHistoryExample;
 import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+@Mapper
 public interface PunchInHistoryMapper {
     long countByExample(PunchInHistoryExample example);
 

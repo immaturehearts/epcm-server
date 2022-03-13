@@ -1,14 +1,16 @@
 server:
   port: 9080
 
-#mybatis:
-#  mapper-locations:
-#    classpath: mapper/*.xml
-#  type-aliases-package: com.epcm.entity
-
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/epcm_db #url
     username: root  #用户名
     password: 123456  #密码
     driver-class-name: com.mysql.cj.jdbc.Driver  #数据库链接驱动
+
+mybatis:
+  mapper-locations:
+    classpath: mapper/*.xml
+  type-aliases-package: com.epcm.entity
+  configuration:
+    map-underscore-to-camel-case: true
