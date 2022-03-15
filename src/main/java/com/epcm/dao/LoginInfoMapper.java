@@ -1,7 +1,7 @@
 package com.epcm.dao;
 
 import com.epcm.entity.LoginInfo;
-import com.epcm.entity.example.LoginInfoExample;
+import com.epcm.entity.LoginInfoExample;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;

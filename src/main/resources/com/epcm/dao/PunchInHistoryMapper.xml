@@ -72,7 +72,7 @@
   <sql id="Base_Column_List">
     id, uid, health, degree, vaccine, location, gmt_modify, gmt_create
   </sql>
-  <select id="selectByExample" parameterType="com.epcm.entity.example.PunchInHistoryExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.epcm.entity.PunchInHistoryExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -97,7 +97,7 @@
     delete from ep_punch_in_history
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.epcm.entity.example.PunchInHistoryExample">
+  <delete id="deleteByExample" parameterType="com.epcm.entity.PunchInHistoryExample">
     delete from ep_punch_in_history
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -166,7 +166,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.epcm.entity.example.PunchInHistoryExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.epcm.entity.PunchInHistoryExample" resultType="java.lang.Long">
     select count(*) from ep_punch_in_history
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

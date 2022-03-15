@@ -3,7 +3,7 @@ package com.epcm.service;
 import com.epcm.common.EntityMapConvertor;
 import com.epcm.dao.PunchInHistoryMapper;
 import com.epcm.entity.PunchInHistory;
-import com.epcm.entity.example.PunchInHistoryExample;
+import com.epcm.entity.PunchInHistoryExample;
 import com.epcm.enunn.StatusEnum;
 import com.epcm.exception.StatusException;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,7 +2,7 @@ package com.epcm.manager;
 
 import com.epcm.dao.UserMapper;
 import com.epcm.entity.User;
-import com.epcm.entity.example.UserExample;
+import com.epcm.entity.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

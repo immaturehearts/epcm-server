@@ -6,7 +6,7 @@ import com.epcm.dao.UserInfoMapper;
 import com.epcm.dao.UserMapper;
 import com.epcm.entity.User;
 import com.epcm.entity.UserInfo;
-import com.epcm.entity.example.UserInfoExample;
+import com.epcm.entity.UserInfoExample;
 import com.epcm.enunn.StatusEnum;
 import com.epcm.enunn.UserStatusEnum;
 import com.epcm.enunn.UserTypeEnum;

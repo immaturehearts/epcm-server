@@ -1,7 +1,7 @@
 package com.epcm.dao;
 
 import com.epcm.entity.PunchInHistory;
-import com.epcm.entity.example.PunchInHistoryExample;
+import com.epcm.entity.PunchInHistoryExample;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;

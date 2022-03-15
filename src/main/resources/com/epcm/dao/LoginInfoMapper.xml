@@ -71,7 +71,7 @@
   <sql id="Base_Column_List">
     id, uid, login_type, login_count, last_login_time, gmt_modify, gmt_create
   </sql>
-  <select id="selectByExample" parameterType="com.epcm.entity.example.LoginInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.epcm.entity.LoginInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -96,7 +96,7 @@
     delete from ep_login_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.epcm.entity.example.LoginInfoExample">
+  <delete id="deleteByExample" parameterType="com.epcm.entity.LoginInfoExample">
     delete from ep_login_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
@@ -159,7 +159,7 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.epcm.entity.example.LoginInfoExample" resultType="java.lang.Long">
+  <select id="countByExample" parameterType="com.epcm.entity.LoginInfoExample" resultType="java.lang.Long">
     select count(*) from ep_login_info
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />

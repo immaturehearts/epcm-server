@@ -1,17 +1,18 @@
-package com.epcm.entity.example;
+package com.epcm.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class LoginInfoExample {
+public class UserPositionExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public LoginInfoExample() {
+    public UserPositionExample() {
         oredCriteria = new ArrayList<>();
     }
 
@@ -225,183 +226,263 @@ public class LoginInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andLoginTypeIsNull() {
-            addCriterion("login_type is null");
+        public Criteria andCityIsNull() {
+            addCriterion("city is null");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTypeIsNotNull() {
-            addCriterion("login_type is not null");
+        public Criteria andCityIsNotNull() {
+            addCriterion("city is not null");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTypeEqualTo(Integer value) {
-            addCriterion("login_type =", value, "loginType");
+        public Criteria andCityEqualTo(String value) {
+            addCriterion("city =", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTypeNotEqualTo(Integer value) {
-            addCriterion("login_type <>", value, "loginType");
+        public Criteria andCityNotEqualTo(String value) {
+            addCriterion("city <>", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTypeGreaterThan(Integer value) {
-            addCriterion("login_type >", value, "loginType");
+        public Criteria andCityGreaterThan(String value) {
+            addCriterion("city >", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTypeGreaterThanOrEqualTo(Integer value) {
-            addCriterion("login_type >=", value, "loginType");
+        public Criteria andCityGreaterThanOrEqualTo(String value) {
+            addCriterion("city >=", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTypeLessThan(Integer value) {
-            addCriterion("login_type <", value, "loginType");
+        public Criteria andCityLessThan(String value) {
+            addCriterion("city <", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTypeLessThanOrEqualTo(Integer value) {
-            addCriterion("login_type <=", value, "loginType");
+        public Criteria andCityLessThanOrEqualTo(String value) {
+            addCriterion("city <=", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTypeIn(List<Integer> values) {
-            addCriterion("login_type in", values, "loginType");
+        public Criteria andCityLike(String value) {
+            addCriterion("city like", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTypeNotIn(List<Integer> values) {
-            addCriterion("login_type not in", values, "loginType");
+        public Criteria andCityNotLike(String value) {
+            addCriterion("city not like", value, "city");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTypeBetween(Integer value1, Integer value2) {
-            addCriterion("login_type between", value1, value2, "loginType");
+        public Criteria andCityIn(List<String> values) {
+            addCriterion("city in", values, "city");
             return (Criteria) this;
         }
 
-        public Criteria andLoginTypeNotBetween(Integer value1, Integer value2) {
-            addCriterion("login_type not between", value1, value2, "loginType");
+        public Criteria andCityNotIn(List<String> values) {
+            addCriterion("city not in", values, "city");
             return (Criteria) this;
         }
 
-        public Criteria andLoginCountIsNull() {
-            addCriterion("login_count is null");
+        public Criteria andCityBetween(String value1, String value2) {
+            addCriterion("city between", value1, value2, "city");
             return (Criteria) this;
         }
 
-        public Criteria andLoginCountIsNotNull() {
-            addCriterion("login_count is not null");
+        public Criteria andCityNotBetween(String value1, String value2) {
+            addCriterion("city not between", value1, value2, "city");
             return (Criteria) this;
         }
 
-        public Criteria andLoginCountEqualTo(Long value) {
-            addCriterion("login_count =", value, "loginCount");
+        public Criteria andLocationIsNull() {
+            addCriterion("location is null");
             return (Criteria) this;
         }
 
-        public Criteria andLoginCountNotEqualTo(Long value) {
-            addCriterion("login_count <>", value, "loginCount");
+        public Criteria andLocationIsNotNull() {
+            addCriterion("location is not null");
             return (Criteria) this;
         }
 
-        public Criteria andLoginCountGreaterThan(Long value) {
-            addCriterion("login_count >", value, "loginCount");
+        public Criteria andLocationEqualTo(String value) {
+            addCriterion("location =", value, "location");
             return (Criteria) this;
         }
 
-        public Criteria andLoginCountGreaterThanOrEqualTo(Long value) {
-            addCriterion("login_count >=", value, "loginCount");
+        public Criteria andLocationNotEqualTo(String value) {
+            addCriterion("location <>", value, "location");
             return (Criteria) this;
         }
 
-        public Criteria andLoginCountLessThan(Long value) {
-            addCriterion("login_count <", value, "loginCount");
+        public Criteria andLocationGreaterThan(String value) {
+            addCriterion("location >", value, "location");
             return (Criteria) this;
         }
 
-        public Criteria andLoginCountLessThanOrEqualTo(Long value) {
-            addCriterion("login_count <=", value, "loginCount");
+        public Criteria andLocationGreaterThanOrEqualTo(String value) {
+            addCriterion("location >=", value, "location");
             return (Criteria) this;
         }
 
-        public Criteria andLoginCountIn(List<Long> values) {
-            addCriterion("login_count in", values, "loginCount");
+        public Criteria andLocationLessThan(String value) {
+            addCriterion("location <", value, "location");
             return (Criteria) this;
         }
 
-        public Criteria andLoginCountNotIn(List<Long> values) {
-            addCriterion("login_count not in", values, "loginCount");
+        public Criteria andLocationLessThanOrEqualTo(String value) {
+            addCriterion("location <=", value, "location");
             return (Criteria) this;
         }
 
-        public Criteria andLoginCountBetween(Long value1, Long value2) {
-            addCriterion("login_count between", value1, value2, "loginCount");
+        public Criteria andLocationLike(String value) {
+            addCriterion("location like", value, "location");
             return (Criteria) this;
         }
 
-        public Criteria andLoginCountNotBetween(Long value1, Long value2) {
-            addCriterion("login_count not between", value1, value2, "loginCount");
+        public Criteria andLocationNotLike(String value) {
+            addCriterion("location not like", value, "location");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginTimeIsNull() {
-            addCriterion("last_login_time is null");
+        public Criteria andLocationIn(List<String> values) {
+            addCriterion("location in", values, "location");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginTimeIsNotNull() {
-            addCriterion("last_login_time is not null");
+        public Criteria andLocationNotIn(List<String> values) {
+            addCriterion("location not in", values, "location");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginTimeEqualTo(Date value) {
-            addCriterion("last_login_time =", value, "lastLoginTime");
+        public Criteria andLocationBetween(String value1, String value2) {
+            addCriterion("location between", value1, value2, "location");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginTimeNotEqualTo(Date value) {
-            addCriterion("last_login_time <>", value, "lastLoginTime");
+        public Criteria andLocationNotBetween(String value1, String value2) {
+            addCriterion("location not between", value1, value2, "location");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginTimeGreaterThan(Date value) {
-            addCriterion("last_login_time >", value, "lastLoginTime");
+        public Criteria andLongitudeIsNull() {
+            addCriterion("longitude is null");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginTimeGreaterThanOrEqualTo(Date value) {
-            addCriterion("last_login_time >=", value, "lastLoginTime");
+        public Criteria andLongitudeIsNotNull() {
+            addCriterion("longitude is not null");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginTimeLessThan(Date value) {
-            addCriterion("last_login_time <", value, "lastLoginTime");
+        public Criteria andLongitudeEqualTo(BigDecimal value) {
+            addCriterion("longitude =", value, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginTimeLessThanOrEqualTo(Date value) {
-            addCriterion("last_login_time <=", value, "lastLoginTime");
+        public Criteria andLongitudeNotEqualTo(BigDecimal value) {
+            addCriterion("longitude <>", value, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginTimeIn(List<Date> values) {
-            addCriterion("last_login_time in", values, "lastLoginTime");
+        public Criteria andLongitudeGreaterThan(BigDecimal value) {
+            addCriterion("longitude >", value, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginTimeNotIn(List<Date> values) {
-            addCriterion("last_login_time not in", values, "lastLoginTime");
+        public Criteria andLongitudeGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("longitude >=", value, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginTimeBetween(Date value1, Date value2) {
-            addCriterion("last_login_time between", value1, value2, "lastLoginTime");
+        public Criteria andLongitudeLessThan(BigDecimal value) {
+            addCriterion("longitude <", value, "longitude");
             return (Criteria) this;
         }
 
-        public Criteria andLastLoginTimeNotBetween(Date value1, Date value2) {
-            addCriterion("last_login_time not between", value1, value2, "lastLoginTime");
+        public Criteria andLongitudeLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("longitude <=", value, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeIn(List<BigDecimal> values) {
+            addCriterion("longitude in", values, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeNotIn(List<BigDecimal> values) {
+            addCriterion("longitude not in", values, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("longitude between", value1, value2, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLongitudeNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("longitude not between", value1, value2, "longitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeIsNull() {
+            addCriterion("latitude is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeIsNotNull() {
+            addCriterion("latitude is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeEqualTo(BigDecimal value) {
+            addCriterion("latitude =", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeNotEqualTo(BigDecimal value) {
+            addCriterion("latitude <>", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeGreaterThan(BigDecimal value) {
+            addCriterion("latitude >", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("latitude >=", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeLessThan(BigDecimal value) {
+            addCriterion("latitude <", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("latitude <=", value, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeIn(List<BigDecimal> values) {
+            addCriterion("latitude in", values, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeNotIn(List<BigDecimal> values) {
+            addCriterion("latitude not in", values, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("latitude between", value1, value2, "latitude");
+            return (Criteria) this;
+        }
+
+        public Criteria andLatitudeNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("latitude not between", value1, value2, "latitude");
             return (Criteria) this;
         }
 
