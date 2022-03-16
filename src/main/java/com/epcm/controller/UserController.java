@@ -42,16 +42,40 @@ public class UserController {
     )
     public Map<String, Object> Register (@RequestParam(value = "phone", required = true) String phone,
                                               @RequestParam(value = "password", required = true) String password,
-                                              @RequestParam(value = "userName", required = true) String userName){
+                                              @RequestParam(value = "userName", required = true) String userName,
+                                         @RequestParam(value = "verifyCode", required = true) String verifyCode){
         User user = UserBuilder.anUser()
                 .withPhone(phone)
                 .withPassword(password)
                 .withUserName(userName)
                 .build();
-        Map<String, Object> map = userService.register(user);
+        Map<String, Object> map = userService.register(user,verifyCode);
         return ReturnCodeBuilder.successBuilder()
                 .addDataValue(map)
                 .buildMap();
+    }
+
+    @ApiOperation(
+            value = "手机密码登录",
+            notes = "手机密码登录"
+    )
+    @RequestMapping(
+            value = "login",
+            method = RequestMethod.GET
+    )
+    @Transactional(
+            rollbackFor = Exception.class
+    )
+    public Map<String, Object> LoginByTelephoneAndPassword (@RequestParam(value = "phone", required = true) String phone,
+                                                            @RequestParam(value = "password", required = true) String password){
+        String token = userService.loginByTelephoneAndPassword(phone,password);
+        Map<String, Object> map = new HashMap<>();
+        map.put("token", token);
+        return ReturnCodeBuilder.successBuilder()
+                .addDataValue(map)
+                .buildMap();
+        ///TODO：抛出异常时如何返回错误码
+        ///TODO: 登录后插入数据至登录表
     }
 
     @ApiOperation(
@@ -79,6 +103,7 @@ public class UserController {
         return ReturnCodeBuilder.successBuilder()
                 .addDataValue(userService.basicInfoUpload(userInfo,httpUtil.getUidByToken(httpUtil.getToken(request))))
                 .buildMap();
+        ///TODO: 重复上传问题
     }
 
     @ApiOperation(

@@ -11,7 +11,10 @@ public interface UserService {
     User selectByPrimaryKey(Long id);
 
     //注册用户
-    Map<String,Object> register (User user);
+    Map<String,Object> register (User user, String verifyCode);
+
+    //手机号密码登录
+    String loginByTelephoneAndPassword(String phone, String password);
 
     //上传用户信息
     Map<String,Object> basicInfoUpload (UserInfo userInfo, Long uid);

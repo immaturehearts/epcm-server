@@ -86,6 +86,16 @@ public class UserManagerImpl implements UserManager{
         return userMapper.selectByExample(userExample);
     }
 
+    @Override
+    public List<User> checkPhoneAndPassword(User user) {
+        UserExample userExample = new UserExample();
+        UserExample.Criteria criteria = userExample.createCriteria();
+        buildUserCriteria(user,criteria);
+        criteria.andPhoneEqualTo(user.getPhone())
+                .andPasswordEqualTo(user.getPassword());
+        return userMapper.selectByExample(userExample);
+    }
+
 
     public void buildUserCriteria(User user, UserExample.Criteria criteria){
         if (user.getId() != null) {

@@ -2,15 +2,19 @@ package com.epcm.service;
 
 import com.epcm.common.CollectionUtil;
 import com.epcm.common.EntityMapConvertor;
+import com.epcm.common.VerifyCodeCheck;
 import com.epcm.dao.UserInfoMapper;
 import com.epcm.dao.UserMapper;
 import com.epcm.entity.User;
 import com.epcm.entity.UserInfo;
 import com.epcm.entity.UserInfoExample;
+import com.epcm.entity.builder.UserBuilder;
 import com.epcm.enunn.StatusEnum;
 import com.epcm.enunn.UserStatusEnum;
 import com.epcm.enunn.UserTypeEnum;
 import com.epcm.exception.StatusException;
+import com.epcm.manager.RedisManager;
+import com.epcm.manager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +22,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -30,6 +35,10 @@ public class UserServiceImpl implements UserService{
     UserMapper userMapper;
     @Autowired
     UserInfoMapper userInfoMapper;
+    @Autowired
+    UserManager userManager;
+    @Autowired
+    RedisManager redisManager;
 
 //    @Override
 //    public int insertUser(User user) {
@@ -43,7 +52,23 @@ public class UserServiceImpl implements UserService{
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Map<String, Object> register (User user) {
+    public Map<String, Object> register (User user, String verifyCode) {
+        //检查手机号
+        if (!VerifyCodeCheck.checkTelephoneNumber(user.getPhone())) {
+            throw new StatusException(StatusEnum.INVALID_TELEPHONE_NUMBER);
+        }
+        //检查手机号与短信验证码
+        if (!VerifyCodeCheck.checkTelephoneNumberAndCode(user.getPhone(),verifyCode)) {
+            throw new StatusException(StatusEnum.INVALID_VERIFY_CODE);
+        }
+        //检查手机号是否被注册
+        User existUser = UserBuilder.anUser()
+                .withPhone(user.getPhone())
+                .build();
+        if(!CollectionUtils.isEmpty(userManager.selectByUserWithPhone(existUser))){
+            throw new StatusException(StatusEnum.USER_ALREADY_EXIST);
+        }
+
         long uid;
         user.setType(UserTypeEnum.USER.getCode());
         user.setStatus(UserStatusEnum.AVAILABLE.getCode());
@@ -58,6 +83,51 @@ public class UserServiceImpl implements UserService{
         user.setId((long)uid);
 
         return EntityMapConvertor.entity2Map(user);
+    }
+
+    @Override
+    public String loginByTelephoneAndPassword(String phone, String password) {
+        //验证手机号是否合法
+        if (!VerifyCodeCheck.checkTelephoneNumber(phone)) {
+            throw new StatusException(StatusEnum.INVALID_TELEPHONE_NUMBER);
+        }
+        //登录
+        User user = UserBuilder
+                .anUser()
+                .withPhone(phone)
+                .withPassword(password)
+                .build();
+        //查找是否存在该用户
+        List<User> users = userManager.selectByUserWithPhone(user);
+        //用户不存在
+        if (CollectionUtils.isEmpty(users)) {
+            throw new StatusException(StatusEnum.USER_NOT_EXIST);
+        }
+        //用户不唯一
+        if (users.size() > 1) {
+            throw new StatusException(StatusEnum.USER_NOT_UNIQUE);
+        }
+
+        //验证用户密码
+        List<User> users2 = userManager.selectByUserWithPhone(user);
+        //密码错误
+        if (CollectionUtils.isEmpty(users2)) {
+            throw new StatusException(StatusEnum.PASSWORD_NOT_CORRECT);
+        }
+        //用户不唯一
+        if (users2.size() > 1) {
+            throw new StatusException(StatusEnum.USER_NOT_UNIQUE);
+        }
+
+        return SetUserToken(users2.get(0));
+    }
+
+    //设置token
+    private String SetUserToken(User user) {
+        String token = UUID.randomUUID().toString().replaceAll("-","");
+        redisManager.hSet(REDIS_TOKEN_KEY, token, user.getId().toString(), 100000*1000);
+        redisManager.hSetAll(REDIS_USER_KEY + user.getId().toString(), EntityMapConvertor.entity2Map(user), 100000*1000);
+        return token;
     }
 
     @Override
