@@ -19,6 +19,7 @@ public enum StatusEnum {
     USERINFO_INSERT_FAILED(511,"USERINFO_INSERT_FAILED : 用户信息插入失败！"),
     POSITION_INSERT_FAILED(512,"POSITION_INSERT_FAILED : 定位信息上传失败！"),
     PASSWORD_NOT_CORRECT(513, "PASSWORD_NOT_CORRECT : 密码错误！"),
+    USER_LOGOUT_FAILED(514, "USER_LOGOUT_FAILED : 退出登录失败！"),
     ;
 
     final int code;

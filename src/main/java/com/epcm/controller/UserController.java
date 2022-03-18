@@ -6,6 +6,7 @@ import com.epcm.entity.User;
 import com.epcm.entity.UserInfo;
 import com.epcm.entity.builder.UserBuilder;
 import com.epcm.entity.builder.UserInfoBuilder;
+import com.epcm.enunn.StatusEnum;
 import com.epcm.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -74,8 +75,6 @@ public class UserController {
         return ReturnCodeBuilder.successBuilder()
                 .addDataValue(map)
                 .buildMap();
-        ///TODO：抛出异常时如何返回错误码
-        ///TODO: 登录后插入数据至登录表
     }
 
     @ApiOperation(
@@ -101,9 +100,8 @@ public class UserController {
                 .withTrueName(true_name)
                 .build();
         return ReturnCodeBuilder.successBuilder()
-                .addDataValue(userService.basicInfoUpload(userInfo,httpUtil.getUidByToken(httpUtil.getToken(request))))
+                .addDataValue(userService.modifyUserInfo(userInfo,httpUtil.getUidByToken(httpUtil.getToken(request))))
                 .buildMap();
-        ///TODO: 重复上传问题
     }
 
     @ApiOperation(
@@ -124,29 +122,41 @@ public class UserController {
     }
 
     @ApiOperation(
-            value = "修改个人信息",
-            notes = "修改个人信息"
+            value = "修改用户名",
+            notes = "修改用户名"
     )
     @RequestMapping(
-            value = "/modifyInfo",
+            value = "/modifyUserName",
             method = RequestMethod.POST
     )
     @Transactional(
             rollbackFor = Exception.class
     )
-    public Map<String, Object> modifyUserInfo(@RequestParam(value = "gender", required = true) Integer gender,
-                                              @RequestParam(value = "id_card", required = true) String id_card_number,
-                                              @RequestParam(value = "email", required = true) String email,
-                                              @RequestParam(value = "true_name", required = true) String true_name,
+    public Map<String, Object> modifyUserInfo(@RequestParam(value = "user_name", required = true) String name,
                                               HttpServletRequest request) {
-        UserInfo userInfo = UserInfoBuilder.anUserInfo()
-                .withGender(gender)
-                .withIdCardNumber(id_card_number)
-                .withEmailAddr(email)
-                .withTrueName(true_name)
+        User user = UserBuilder.anUser()
+                .withUserName(name)
                 .build();
         return ReturnCodeBuilder.successBuilder()
-                .addDataValue(userService.modifyUserInfo(userInfo,httpUtil.getUidByToken(httpUtil.getToken(request))))
+                .addDataValue(userService.modifyUserName(user,httpUtil.getUidByToken(httpUtil.getToken(request))))
                 .buildMap();
+    }
+
+    @ApiOperation(
+            value = "退出登录",
+            notes = "退出登录"
+    )
+    @RequestMapping(
+            value = "/logout",
+            method = RequestMethod.GET
+    )
+    @Transactional(
+            rollbackFor = Exception.class
+    )
+    public Map<String, Object> logout(HttpServletRequest request) {
+        if(userService.logout(request)) {
+            return ReturnCodeBuilder.successBuilder().buildMap();
+        }
+        return ReturnCodeBuilder.failedBuilder(514).buildMap();
     }
 }

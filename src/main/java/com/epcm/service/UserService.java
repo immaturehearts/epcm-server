@@ -3,6 +3,7 @@ package com.epcm.service;
 import com.epcm.entity.User;
 import com.epcm.entity.UserInfo;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 public interface UserService {
@@ -30,4 +31,10 @@ public interface UserService {
 
     //获取用户头像
     String getAvatar (Long uid);
+
+    //修改用户名
+    Map<String,Object> modifyUserName (User user, Long uid);
+
+    //退出登录
+    boolean logout(HttpServletRequest httpServletRequest);
 }

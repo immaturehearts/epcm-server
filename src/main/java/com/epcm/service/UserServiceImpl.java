@@ -3,11 +3,11 @@ package com.epcm.service;
 import com.epcm.common.CollectionUtil;
 import com.epcm.common.EntityMapConvertor;
 import com.epcm.common.VerifyCodeCheck;
+import com.epcm.dao.LoginInfoMapper;
 import com.epcm.dao.UserInfoMapper;
 import com.epcm.dao.UserMapper;
-import com.epcm.entity.User;
-import com.epcm.entity.UserInfo;
-import com.epcm.entity.UserInfoExample;
+import com.epcm.entity.*;
+import com.epcm.entity.builder.LoginInfoBuilder;
 import com.epcm.entity.builder.UserBuilder;
 import com.epcm.enunn.StatusEnum;
 import com.epcm.enunn.UserStatusEnum;
@@ -20,6 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -39,6 +42,8 @@ public class UserServiceImpl implements UserService{
     UserManager userManager;
     @Autowired
     RedisManager redisManager;
+    @Autowired
+    LoginInfoMapper loginInfoMapper;
 
 //    @Override
 //    public int insertUser(User user) {
@@ -95,7 +100,6 @@ public class UserServiceImpl implements UserService{
         User user = UserBuilder
                 .anUser()
                 .withPhone(phone)
-                .withPassword(password)
                 .build();
         //查找是否存在该用户
         List<User> users = userManager.selectByUserWithPhone(user);
@@ -108,8 +112,9 @@ public class UserServiceImpl implements UserService{
             throw new StatusException(StatusEnum.USER_NOT_UNIQUE);
         }
 
+        user.setPassword(password);
         //验证用户密码
-        List<User> users2 = userManager.selectByUserWithPhone(user);
+        List<User> users2 = userManager.checkPhoneAndPassword(user);
         //密码错误
         if (CollectionUtils.isEmpty(users2)) {
             throw new StatusException(StatusEnum.PASSWORD_NOT_CORRECT);
@@ -117,6 +122,29 @@ public class UserServiceImpl implements UserService{
         //用户不唯一
         if (users2.size() > 1) {
             throw new StatusException(StatusEnum.USER_NOT_UNIQUE);
+        }
+
+        //写入登录信息表
+        LoginInfoExample example = new LoginInfoExample();
+        LoginInfoExample.Criteria criteria = example.createCriteria();
+        Long uid = users2.get(0).getId();
+        criteria.andUidEqualTo(uid);
+        List<LoginInfo> login_types = loginInfoMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(login_types)){
+            LoginInfo loginInfo = LoginInfoBuilder.aLoginInfo()
+                    .withLoginType(0)
+                    .withLoginCount(1L)
+                    .withUid(uid)
+                    .build();
+            loginInfoMapper.insertSelective(loginInfo);
+        } else {
+            Long login_count = login_types.get(0).getLoginCount();
+            Date last_login_time = login_types.get(0).getGmtModify();
+            LoginInfo loginInfo = LoginInfoBuilder.aLoginInfo()
+                    .withLoginCount(login_count + 1)
+                    .withLastLoginTime(last_login_time)
+                    .build();
+            loginInfoMapper.updateByExampleSelective(loginInfo, example);
         }
 
         return SetUserToken(users2.get(0));
@@ -178,6 +206,35 @@ public class UserServiceImpl implements UserService{
         List<UserInfo> userInfos = getUserInfoByUserId(uid);
         UserInfo userInfo = CollectionUtil.getUniqueObjectFromList(userInfos);
         return userInfo.getAvatar() == null ? "" : userInfo.getAvatar();
+    }
+
+    @Override
+    public Map<String, Object> modifyUserName(User user, Long uid) {
+        UserExample example = new UserExample();
+        UserExample.Criteria criteria = example.createCriteria();
+        criteria.andIdEqualTo(uid);
+        userMapper.updateByExampleSelective(user, example);
+        return EntityMapConvertor.entity2Map(user);
+    }
+
+    @Override
+    public boolean logout(HttpServletRequest httpServletRequest) {
+        Cookie[] cookies = httpServletRequest.getCookies();
+        if(cookies != null && cookies.length > 0){
+            for (Cookie cookie : cookies){
+                if(cookie.getName().equals(REDIS_TOKEN_KEY)){
+                    if (redisManager.hHasKey(REDIS_TOKEN_KEY, cookie.getValue())) {
+                        String userKey = (String) redisManager.hGet(REDIS_TOKEN_KEY, cookie.getValue());
+                        if(redisManager.hHasKey(REDIS_USER_KEY, userKey)){
+                            redisManager.hDel(REDIS_USER_KEY, userKey);
+                            redisManager.hDel(REDIS_TOKEN_KEY, cookie.getValue());
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public List<UserInfo> getUserInfoByUserId(Long uid){
