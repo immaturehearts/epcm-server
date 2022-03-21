@@ -9,6 +9,7 @@ import com.epcm.exception.StatusException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -20,14 +21,24 @@ public class PunchInHistoryServiceImpl implements PunchInHistoryService{
 
     @Override
     public Map<String, Object> post(PunchInHistory history, Long uid) {
-        history.setUid(uid);
-        try {
-            long id = punchInHistoryMapper.insertSelective(history);
-            history.setId(id);
+        PunchInHistoryExample punchInHistoryExample = new PunchInHistoryExample();
+        PunchInHistoryExample.Criteria criteria = punchInHistoryExample.createCriteria();
+        criteria.andUidEqualTo(uid);
+        List<PunchInHistory> histories = punchInHistoryMapper.selectByExample(punchInHistoryExample);
+        if(CollectionUtils.isEmpty(histories)){
+            history.setUid(uid);
+            punchInHistoryMapper.insertSelective(history);
+        } else {
+            punchInHistoryMapper.updateByExampleSelective(history, punchInHistoryExample);
         }
-        catch (Exception e){
-            throw new StatusException(StatusEnum.HISTORY_INSERT_FAIL);
-        }
+//        history.setUid(uid);
+//        try {
+//            long id = punchInHistoryMapper.insertSelective(history);
+//            history.setId(id);
+//        }
+//        catch (Exception e){
+//            throw new StatusException(StatusEnum.HISTORY_INSERT_FAIL);
+//        }
         return EntityMapConvertor.entity2Map(history);
     }
 
