@@ -84,4 +84,29 @@ public class PositionController {
 //                .addDataValue(map)
 //                .buildMap();
 //    }
+
+    @ApiOperation(
+            value = "查看附近的人",
+            notes = "查看附近的人"
+    )
+    @RequestMapping(
+            value = "/test",
+            method = RequestMethod.GET
+    )
+    @Transactional(
+            rollbackFor = Exception.class
+    )
+    public Map<String, Object> getNearByTest (@RequestParam(value = "longitude", required = true) Double longitude,
+                                              @RequestParam(value = "latitude", required = true) Double latitude,
+                                              @RequestParam(value = "city", required = true) String city,
+                                              @RequestParam(value = "uid", required = true) Long uid,
+                                          HttpServletRequest httpServletRequest){
+        Map<String, Object> map = new HashMap<>();
+        String hasNearBy = positionService.testGetNearBy(longitude, latitude, city, uid);
+        map.put("nearby", hasNearBy);
+
+        return ReturnCodeBuilder.successBuilder()
+                .addDataValue(map)
+                .buildMap();
+    }
 }

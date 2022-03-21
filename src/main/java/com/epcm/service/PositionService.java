@@ -13,4 +13,5 @@ public interface PositionService {
     //查询附近的人，半径单位：km
      String getNearBy(Double radius, Double lon, Double lat, String city, Long uid);
 
+    String testGetNearBy(Double lon, Double lat, String city, Long uid);
 }

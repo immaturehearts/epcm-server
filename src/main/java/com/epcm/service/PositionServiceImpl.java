@@ -65,12 +65,45 @@ public class PositionServiceImpl implements PositionService{
                 .andLongitudeBetween(BigDecimal.valueOf(minlng), BigDecimal.valueOf(maxlng))
                 .andCityEqualTo(city)
                 .andUidNotEqualTo(uid)
-                .andGmtModifyBetween(now, before);
+                .andGmtModifyBetween(before, now);
         List<UserPosition> positions = userPositionMapper.selectByExample(example);
         if(CollectionUtils.isEmpty(positions)){
-            return "has";
-        } else {
             return "has not";
+        } else {
+            return "has";
         }
     }
+
+    @Override
+    public String testGetNearBy(Double lon, Double lat, String city, Long uid) {
+        double r = 6371;//地球半径千米
+        double dlng =  2*Math.asin(Math.sin(radius/(2*r))/Math.cos(lat*Math.PI/180));
+        dlng = dlng*180/Math.PI;//角度转为弧度
+        double dlat = radius/r;
+        dlat = dlat*180/Math.PI;
+        double minlat = lat - dlat;
+        double maxlat = lat + dlat;
+        double minlng = lon - dlng;
+        double maxlng = lon + dlng;
+
+        Date now = new Date(System.currentTimeMillis());
+        System.out.println(now.toString());
+        Date before = new Date(now.getTime() - ten_min);
+        UserPositionExample example = new UserPositionExample();
+        UserPositionExample.Criteria criteria = example.createCriteria();
+        criteria
+                .andLatitudeBetween(BigDecimal.valueOf(minlat), BigDecimal.valueOf(maxlat))
+                .andLongitudeBetween(BigDecimal.valueOf(minlng), BigDecimal.valueOf(maxlng))
+                .andCityEqualTo(city)
+                .andUidNotEqualTo(uid)
+                .andGmtModifyBetween(before, now);
+        List<UserPosition> positions = userPositionMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(positions)){
+            return "has not";
+        } else {
+            System.out.println(positions.get(0).getGmtModify().toString());
+            return "has";
+        }
+    }
+
 }
