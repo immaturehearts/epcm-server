@@ -8,9 +8,9 @@ import java.util.Map;
 @Service
 public interface PositionService {
     //用户定位上传
-    Map<String, Object> positionPost (UserPosition userPosition, Long uid);
+    String positionPost (UserPosition userPosition, Long uid);
 
-    ///TODO: 附近的人并报警
+    //查询附近的人，半径单位：km
+     String getNearBy(Double radius, Double lon, Double lat, String city, Long uid);
 
-    ///TODO: 定时器-清除一定时间（如：一天）之前记录
 }

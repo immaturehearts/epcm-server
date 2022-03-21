@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @RequestMapping("/position")
@@ -50,8 +52,36 @@ public class PositionController {
                 .withLocation(location)
                 .withLongitude(longitude)
                 .withLatitude(latitude).build();
+        Long uid = httpUtil.getUidByToken(httpUtil.getToken(request));
+        Map<String, Object> map = new HashMap<>();
+        String hasNearBy = positionService.positionPost(userPosition, uid);
+        map.put("nearby", hasNearBy);
         return ReturnCodeBuilder.successBuilder()
-                .addDataValue(positionService.positionPost(userPosition ,httpUtil.getUidByToken(httpUtil.getToken(request))))
+                .addDataValue(map)
                 .buildMap();
     }
+
+
+//    @ApiOperation(
+//            value = "查看附近的人",
+//            notes = "查看附近的人"
+//    )
+//    @RequestMapping(
+//            value = "/nearby",
+//            method = RequestMethod.GET
+//    )
+//    @Transactional(
+//            rollbackFor = Exception.class
+//    )
+//    public Map<String, Object> getNearBy (@RequestParam(value = "radius", required = true) Integer radius,
+//                                          HttpServletRequest httpServletRequest){
+//        Long uid = httpUtil.getUidByToken(httpUtil.getToken(httpServletRequest));
+//        Map<String, Object> map = new HashMap<>();
+//        String hasNearBy = positionService.getNearBy(radius, uid);
+//        map.put("nearby", hasNearBy);
+//
+//        return ReturnCodeBuilder.successBuilder()
+//                .addDataValue(map)
+//                .buildMap();
+//    }
 }
