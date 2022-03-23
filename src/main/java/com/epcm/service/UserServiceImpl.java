@@ -147,7 +147,7 @@ public class UserServiceImpl implements UserService{
             loginInfoMapper.updateByExampleSelective(loginInfo, example);
         }
 
-        return SetUserToken(users2.get(0));
+        return String.valueOf(users2.get(0).getType()) + SetUserToken(users2.get(0));
     }
 
     //设置token

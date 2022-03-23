@@ -2,10 +2,15 @@ package com.epcm.service;
 
 import com.epcm.common.EntityMapConvertor;
 import com.epcm.dao.PunchInHistoryMapper;
+import com.epcm.dao.UserMapper;
 import com.epcm.entity.PunchInHistory;
 import com.epcm.entity.PunchInHistoryExample;
+import com.epcm.entity.User;
+import com.epcm.entity.UserExample;
 import com.epcm.enunn.StatusEnum;
+import com.epcm.enunn.UserTypeEnum;
 import com.epcm.exception.StatusException;
+import com.epcm.manager.UserManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +23,8 @@ import java.util.Map;
 public class PunchInHistoryServiceImpl implements PunchInHistoryService{
     @Autowired
     PunchInHistoryMapper punchInHistoryMapper;
+    @Autowired
+    UserMapper userMapper;
 
     @Override
     public Map<String, Object> post(PunchInHistory history, Long uid) {
@@ -50,7 +57,17 @@ public class PunchInHistoryServiceImpl implements PunchInHistoryService{
     }
 
     @Override
-    public List<Map<String, Object>> getAllHistory(Long page, Integer pageSize) {
+    public List<Map<String, Object>> getAllHistory(Long uid, Long page, Integer pageSize) {
+        //检查用户是否有管理员权限
+        UserExample userExample = new UserExample();
+        UserExample.Criteria userCriteria = userExample.createCriteria();
+        userCriteria.andIdEqualTo(uid)
+                .andTypeEqualTo(UserTypeEnum.ADMIN.getCode());
+        List<User> users = userMapper.selectByExample(userExample);
+        if(CollectionUtils.isEmpty(users)){
+            throw new StatusException(StatusEnum.FORBIDDEN);
+        }
+
         PunchInHistoryExample punchInHistoryExample = new PunchInHistoryExample();
         PunchInHistoryExample.Criteria criteria = punchInHistoryExample.createCriteria();
         criteria.andIdIsNotNull();
@@ -67,15 +84,43 @@ public class PunchInHistoryServiceImpl implements PunchInHistoryService{
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteById(Long id, Long uid) {
-        ///TODO: 删除用户打卡记录
-        return false;
+        //检查用户是否有管理员权限
+        UserExample userExample = new UserExample();
+        UserExample.Criteria userCriteria = userExample.createCriteria();
+        userCriteria.andIdEqualTo(uid)
+                .andTypeEqualTo(UserTypeEnum.ADMIN.getCode());
+        List<User> users = userMapper.selectByExample(userExample);
+        if(CollectionUtils.isEmpty(users)){
+            throw new StatusException(StatusEnum.FORBIDDEN);
+        }
+
+        return punchInHistoryMapper.deleteByPrimaryKey(id)!=0;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public long getCountByUid(Long uid) {
         PunchInHistoryExample punchInHistoryExample = getExampleByUid(uid);
+        return punchInHistoryMapper.countByExample(punchInHistoryExample);
+    }
+
+    @Override
+    public long getAllCount(Long uid) {
+        //检查用户是否有管理员权限
+        UserExample userExample = new UserExample();
+        UserExample.Criteria userCriteria = userExample.createCriteria();
+        userCriteria.andIdEqualTo(uid)
+                .andTypeEqualTo(UserTypeEnum.ADMIN.getCode());
+        List<User> users = userMapper.selectByExample(userExample);
+        if(CollectionUtils.isEmpty(users)){
+            throw new StatusException(StatusEnum.FORBIDDEN);
+        }
+
+        PunchInHistoryExample punchInHistoryExample = new PunchInHistoryExample();
+        PunchInHistoryExample.Criteria criteria = punchInHistoryExample.createCriteria();
+        criteria.andIdIsNotNull();
         return punchInHistoryMapper.countByExample(punchInHistoryExample);
     }
 

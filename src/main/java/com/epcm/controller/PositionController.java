@@ -54,7 +54,7 @@ public class PositionController {
                 .withLatitude(latitude).build();
         Long uid = httpUtil.getUidByToken(httpUtil.getToken(request));
         Map<String, Object> map = new HashMap<>();
-        String hasNearBy = positionService.positionPost(userPosition, uid);
+        int hasNearBy = positionService.positionPost(userPosition, uid);
         map.put("nearby", hasNearBy);
         return ReturnCodeBuilder.successBuilder()
                 .addDataValue(map)
@@ -102,8 +102,14 @@ public class PositionController {
                                               @RequestParam(value = "uid", required = true) Long uid,
                                           HttpServletRequest httpServletRequest){
         Map<String, Object> map = new HashMap<>();
-        String hasNearBy = positionService.testGetNearBy(longitude, latitude, city, uid);
+        int hasNearBy = positionService.testGetNearBy(longitude, latitude, city, uid);
         map.put("nearby", hasNearBy);
+
+//        long fourteen_days = 14*24*60*60*1000;
+//        Date now = new Date(System.currentTimeMillis());
+//        System.out.println(now.toString());
+//        Date before = new Date(now.getTime() - fourteen_days);
+//        System.out.println(before.toString());
 
         return ReturnCodeBuilder.successBuilder()
                 .addDataValue(map)

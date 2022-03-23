@@ -70,8 +70,10 @@ public class UserController {
     public Map<String, Object> LoginByTelephoneAndPassword (@RequestParam(value = "phone", required = true) String phone,
                                                             @RequestParam(value = "password", required = true) String password){
         String token = userService.loginByTelephoneAndPassword(phone,password);
+        int userType = Integer.parseInt(token.substring(0,1));
         Map<String, Object> map = new HashMap<>();
-        map.put("token", token);
+        map.put("token", token.substring(1));
+        map.put("type", userType);
         return ReturnCodeBuilder.successBuilder()
                 .addDataValue(map)
                 .buildMap();

@@ -77,6 +77,7 @@ public class PunchInHistoryController {
 
         return ReturnCodeBuilder.successBuilder()
                 .addDataValue(mapList)
+                .addDataCount(punchInHistoryService.getCountByUid(uid))
                 .buildMap();
     }
 
@@ -100,6 +101,70 @@ public class PunchInHistoryController {
         return ReturnCodeBuilder.successBuilder()
                 .addDataValue(map)
                 .buildMap();
+    }
+
+    @ApiOperation(
+            value = "获取所有用户打卡记录",
+            notes = "获取所有用户打卡记录"
+    )
+    @RequestMapping(
+            value = "/all/history",
+            method = RequestMethod.GET
+    )
+    @Transactional(
+            rollbackFor = Exception.class
+    )
+    public Map<String, Object> getAllHistoryList (@RequestParam(value = "page", required = true) Long page,
+                                                  @RequestParam(value = "pageSize", required = true) Integer pageSize,
+                                                  HttpServletRequest httpServletRequest){
+        Long uid = httpUtil.getUidByToken(httpUtil.getToken(httpServletRequest));
+        List<Map<String, Object>> mapList = punchInHistoryService.getAllHistory(uid,page,pageSize);
+
+        return ReturnCodeBuilder.successBuilder()
+                .addDataValue(mapList)
+                .addDataCount(punchInHistoryService.getAllCount(uid))
+                .buildMap();
+    }
+
+    @ApiOperation(
+            value = "获取所有打卡记录总数",
+            notes = "获取所有打卡记录总数"
+    )
+    @RequestMapping(
+            value = "/all/count",
+            method = RequestMethod.GET
+    )
+    @Transactional(
+            rollbackFor = Exception.class
+    )
+    public Map<String, Object> getAllHistoryCount (HttpServletRequest httpServletRequest){
+        Long uid = httpUtil.getUidByToken(httpUtil.getToken(httpServletRequest));
+        long count = punchInHistoryService.getAllCount(uid);
+        Map<String, Object> map = new HashMap<>();
+        map.put("count", count);
+
+        return ReturnCodeBuilder.successBuilder()
+                .addDataValue(map)
+                .buildMap();
+    }
+
+    @ApiOperation(
+            value = "删除户打卡记录",
+            notes = "删除打卡记录"
+    )
+    @RequestMapping(
+            value = "/historyUser",
+            method = RequestMethod.DELETE
+    )
+    @Transactional(
+            rollbackFor = Exception.class
+    )
+    public Map<String, Object> deleteUserHistory (@RequestParam(value = "id", required = true) Long id,
+                                                  HttpServletRequest httpServletRequest){
+        Long uid = httpUtil.getUidByToken(httpUtil.getToken(httpServletRequest));
+        punchInHistoryService.deleteById(id, uid);
+
+        return ReturnCodeBuilder.successBuilder().buildMap();
     }
 }
 
